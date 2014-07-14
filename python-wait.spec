@@ -1,5 +1,5 @@
 Name:           python-wait
-Version:        0.0.1
+Version:        0.0.2
 Release:        1%{?dist}
 Summary:        Python Wait
 
@@ -27,5 +27,8 @@ Python Wait
 %{python_sitelib}/wait-*.egg-info
 
 %changelog
+* Mon Jul 14 2014 Shawn Siefkas <shawn@siefk.as> - 0.0.2-1
+- Adding Log Existence Check
+
 * Mon Jul 14 2014 Shawn Siefkas <shawn@siefk.as> - 0.0.1-1
 - Initial Spec File
