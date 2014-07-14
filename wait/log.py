@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import os.path
 import re
 import time
 
@@ -30,6 +31,20 @@ def tail(path, seek=None):
             else:
                 yield line
 
+def exists(path, timeout=None):
+    if timeout is not None:
+        start = time.time()
+
+    while True:
+        if os.path.exists(path):
+            return True
+
+        time.sleep(1)
+
+        if timeout is not None:
+            if time.time() - start > timeout:
+                return False
+
 def pattern(path, patterns, seek=None, timeout=None):
     """
     Wait until pattern(s) are detected by tailing a file.  Returns True when complete.
@@ -37,11 +52,14 @@ def pattern(path, patterns, seek=None, timeout=None):
     If optional timeout is set and exceed then it returns False.
     """
 
-    if isinstance(patterns, str):
-        patterns = [patterns]
-
     if timeout is not None:
         start = time.time()
+
+    if not exists(path, timeout=timeout):
+        return False
+
+    if isinstance(patterns, str):
+        patterns = [patterns]
 
     for line in tail(path, seek):
         if line is not None:

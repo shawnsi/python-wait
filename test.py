@@ -20,6 +20,12 @@ class TestWait(unittest.TestCase):
         self.file.write('\n'.encode('utf-8'))
         self.file.flush()
 
+    def test_log_exists(self):
+        assert wait.log.exists(self.file.name)
+
+    def test_log_exists_timeout(self):
+        assert not wait.log.exists('/tmp/nolog', timeout=0)
+
     def test_log_pattern_list(self):
         seek = self.file.tell()
         self.write(self.patterns[0])
@@ -32,6 +38,7 @@ class TestWait(unittest.TestCase):
         assert self.pattern(self.patterns[0], seek=seek, timeout=5)
 
     def test_log_pattern_timeout(self):
+        assert not wait.log.pattern('/tmp/nolog', self.patterns, timeout=0)
         assert not self.pattern(self.patterns, timeout=0)
 
 if __name__ == '__main__':
