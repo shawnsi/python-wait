@@ -1,7 +1,7 @@
 python-wait
 ===========
 
-[![Build Status](https://travis-ci.org/shawnsi/python-wait.png)](https://travis-ci.org/shawnsi/python-wait)
+[![Build Status](https://travis-ci.org/shawnsi/python-wait.png?branch=master)](https://travis-ci.org/shawnsi/python-wait)
 
 Logs
 ----
