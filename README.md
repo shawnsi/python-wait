@@ -34,6 +34,21 @@ w = wait.log.pattern('/path/to/log', 'foo', run=False)
 w()
 ```
 
+TCP Ports
+---------
+
+Block until tcp port 80 is listening on localhost.
+
+```python
+wait.tcp.open(80)
+```
+
+Block until tcp port 80 is listening on a remote host.
+
+```python
+wait.tcp.open(80, host='www.google.com')
+```
+
 Timeouts
 --------
 

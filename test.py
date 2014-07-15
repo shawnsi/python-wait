@@ -3,6 +3,7 @@
 from tempfile import NamedTemporaryFile
 import unittest
 
+import socket
 import wait
 
 
@@ -10,6 +11,7 @@ class TestWait(unittest.TestCase):
 
     def setUp(self):
         self.file = NamedTemporaryFile()
+        self.port = 9999
         self.patterns = ['foo', 'bar', 'f.*']
 
     def pattern(self, *args, **kwargs):
@@ -52,6 +54,17 @@ class TestWait(unittest.TestCase):
     def test_log_pattern_timeout(self):
         assert not wait.log.pattern('/tmp/nolog', self.patterns, timeout=0)
         assert not self.pattern(self.patterns, timeout=0)
+
+    def test_tcp_open(self):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind(('localhost', self.port))
+        s.listen(0)
+        assert wait.tcp.open(self.port, timeout=5)
+        assert wait.tcp.open(80, host='www.google.com', timeout=5)
+        s.close()
+
+    def test_tcp_open_timeout(self):
+        assert not wait.tcp.open(self.port, timeout=0)
 
     def tearDown(self):
         self.file.close()
