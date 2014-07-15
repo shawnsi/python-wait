@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from tempfile import NamedTemporaryFile
+import os
 import unittest
 
 import wait
@@ -52,6 +53,9 @@ class TestWait(unittest.TestCase):
     def test_log_pattern_timeout(self):
         assert not wait.log.pattern('/tmp/nolog', self.patterns, timeout=0)
         assert not self.pattern(self.patterns, timeout=0)
+
+    def tearDown(self):
+        self.file.close()
 
 if __name__ == '__main__':
     unittest.main()
