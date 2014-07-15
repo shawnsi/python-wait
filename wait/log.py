@@ -55,6 +55,8 @@ def pattern(path, patterns, run=True, seek=None, timeout=None):
 
     if isinstance(patterns, str):
         patterns = [patterns]
+    elif isinstance(patterns, tuple):
+        patterns = list(patterns)
 
     if seek is None and os.path.exists(path):
         seek = size(path)

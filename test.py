@@ -32,6 +32,12 @@ class TestWait(unittest.TestCase):
         self.write(self.patterns[1])
         assert self.pattern(self.patterns, seek=seek, timeout=5)
 
+    def test_log_pattern_tuple(self):
+        seek = self.file.tell()
+        self.write(self.patterns[0])
+        self.write(self.patterns[1])
+        assert self.pattern(tuple(self.patterns), seek=seek, timeout=5)
+
     def test_log_pattern_string(self):
         seek = self.file.tell()
         self.write(self.patterns[0])
