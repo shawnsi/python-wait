@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 
 from tempfile import NamedTemporaryFile
-import os
 import unittest
 
 import wait
 
-class TestWait(unittest.TestCase):
 
+class TestWait(unittest.TestCase):
 
     def setUp(self):
         self.file = NamedTemporaryFile()
@@ -61,4 +60,3 @@ if __name__ == '__main__':
     unittest.main()
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
-

@@ -3,11 +3,11 @@
 from setuptools import setup
 
 setup(
-    name = 'wait',
-    version = '0.0.2',
-    author = 'Shawn Siefkas',
-    author_email = 'shawn.siefkas@meredith.com',
-    description = 'Python Wait Utilities',
+    name='wait',
+    version='0.0.2',
+    author='Shawn Siefkas',
+    author_email='shawn.siefkas@meredith.com',
+    description='Python Wait Utilities',
     packages=['wait'],
 )
 

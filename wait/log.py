@@ -5,8 +5,10 @@ import os.path
 import re
 import time
 
+
 def size(path):
     return os.stat(path)[6]
+
 
 def tail(path, seek=None):
     """
@@ -32,6 +34,7 @@ def tail(path, seek=None):
             else:
                 yield line
 
+
 def exists(path, timeout=None):
     if timeout is not None:
         start = time.time()
@@ -46,9 +49,11 @@ def exists(path, timeout=None):
             if time.time() - start > timeout:
                 return False
 
+
 def pattern(path, patterns, run=True, seek=None, timeout=None):
     """
-    Wait until pattern(s) are detected by tailing a file.  Returns True when complete.
+    Wait until pattern(s) are detected by tailing a file.  Returns True when
+    complete.
 
     If optional timeout is set and exceed then it returns False.
     """
@@ -75,7 +80,7 @@ def pattern(path, patterns, run=True, seek=None, timeout=None):
                         patterns.remove(pattern)
 
             if not len(patterns):
-                # Stop looping over generator when all patterns have been matched
+                # Stop looping when all patterns have been matched
                 break
 
             if timeout is not None:
@@ -90,4 +95,3 @@ def pattern(path, patterns, run=True, seek=None, timeout=None):
     return check
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
-
