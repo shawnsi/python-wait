@@ -37,6 +37,12 @@ class TestWait(unittest.TestCase):
         self.write(self.patterns[0])
         assert self.pattern(self.patterns[0], seek=seek, timeout=5)
 
+    def test_log_pattern_nostart(self):
+        p = self.pattern(self.patterns, run=False, timeout=5)
+        self.write(self.patterns[0])
+        self.write(self.patterns[1])
+        assert p()
+
     def test_log_pattern_timeout(self):
         assert not wait.log.pattern('/tmp/nolog', self.patterns, timeout=0)
         assert not self.pattern(self.patterns, timeout=0)
