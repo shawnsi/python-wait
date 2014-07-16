@@ -5,18 +5,23 @@ import os.path
 import re
 import time
 
+from . import decorator
+
+
+def size(path):
+    return os.stat(path)[6]
+
+
 def tail(path, seek=None):
     """
     Implements file tailing as a generator.  Yields line content or None.
     """
     with open(path) as f:
-        if seek is not None:
-            f.seek(seek)
-
-        else:
+        if seek is None:
             # Seek to the end of the file
-            size = os.stat(path)[6]
-            f.seek(size)
+            seek = size(path)
+
+        f.seek(seek)
 
         while True:
             where = f.tell()
@@ -31,51 +36,53 @@ def tail(path, seek=None):
             else:
                 yield line
 
-def exists(path, timeout=None):
-    if timeout is not None:
-        start = time.time()
 
-    while True:
-        if os.path.exists(path):
-            return True
+@decorator.timeout
+def exists(path, timeout=300):
+    return os.path.exists(path)
 
-        time.sleep(1)
 
-        if timeout is not None:
-            if time.time() - start > timeout:
-                return False
-
-def pattern(path, patterns, seek=None, timeout=None):
+def pattern(path, patterns, run=True, seek=None, timeout=300):
     """
-    Wait until pattern(s) are detected by tailing a file.  Returns True when complete.
+    Wait until pattern(s) are detected by tailing a file.  Returns True when
+    complete.
 
     If optional timeout is set and exceed then it returns False.
     """
 
-    if timeout is not None:
-        start = time.time()
-
-    if not exists(path, timeout=timeout):
-        return False
-
     if isinstance(patterns, str):
         patterns = [patterns]
+    elif isinstance(patterns, tuple):
+        patterns = list(patterns)
 
-    for line in tail(path, seek):
-        if line is not None:
-            for pattern in patterns:
-                if re.search(pattern, line):
-                    patterns.remove(pattern)
+    if seek is None and os.path.exists(path):
+        seek = size(path)
 
-        if not len(patterns):
-            # Stop looping over generator when all patterns have been matched
-            break
+    def check():
+        start = time.time()
 
-        if timeout is not None:
-            if time.time() - start > timeout:
-                return False
+        if not exists(path, timeout=timeout):
+            return False
 
-    return True
+        for line in tail(path, seek):
+            if line is not None:
+                for pattern in patterns:
+                    if re.search(pattern, line):
+                        patterns.remove(pattern)
+
+            if not len(patterns):
+                # Stop looping when all patterns have been matched
+                break
+
+            if timeout:
+                if time.time() - start > timeout:
+                    return False
+
+        return True
+
+    if run:
+        return check()
+
+    return check
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
-
