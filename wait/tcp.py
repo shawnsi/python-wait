@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 import socket
-import time
 
 from .decorator import timeout
+
 
 @timeout
 def open(port, host='localhost', timeout=300):

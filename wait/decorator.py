@@ -2,6 +2,7 @@
 
 import time
 
+
 def timeout(func):
     def _timeout(*args, **kwargs):
         TIMEOUT = 300
@@ -14,7 +15,7 @@ def timeout(func):
         while True:
             if func(*args, **kwargs):
                 return True
-        
+
             time.sleep(1)
 
             if TIMEOUT:
