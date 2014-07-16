@@ -52,10 +52,16 @@ wait.tcp.open(80, host='www.google.com')
 Timeouts
 --------
 
-All wait functions take an optional timeout argument which defaults to `False`.
+All wait functions take an optional timeout argument which defaults to `300`.
 The function will return `False` if the timeout is set and exceeded.  The
 timeout is expressed in seconds.
 
 ```python
 wait.log.pattern('/path/to/log', ['foo', 'bar'], timeout=5)
+```
+
+An indefinitely blocking call can be created by setting timeout to `0`.
+
+```python
+wait.log.exists('/path/to/log', timeout=0)
 ```
