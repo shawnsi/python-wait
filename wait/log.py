@@ -5,6 +5,8 @@ import os.path
 import re
 import time
 
+from . import decorator
+
 
 def size(path):
     return os.stat(path)[6]
@@ -35,22 +37,12 @@ def tail(path, seek=None):
                 yield line
 
 
-def exists(path, timeout=None):
-    if timeout is not None:
-        start = time.time()
-
-    while True:
-        if os.path.exists(path):
-            return True
-
-        time.sleep(1)
-
-        if timeout is not None:
-            if time.time() - start > timeout:
-                return False
+@decorator.timeout
+def exists(path, timeout=300):
+    return os.path.exists(path)
 
 
-def pattern(path, patterns, run=True, seek=None, timeout=None):
+def pattern(path, patterns, run=True, seek=None, timeout=300):
     """
     Wait until pattern(s) are detected by tailing a file.  Returns True when
     complete.
@@ -67,8 +59,7 @@ def pattern(path, patterns, run=True, seek=None, timeout=None):
         seek = size(path)
 
     def check():
-        if timeout is not None:
-            start = time.time()
+        start = time.time()
 
         if not exists(path, timeout=timeout):
             return False
@@ -83,7 +74,7 @@ def pattern(path, patterns, run=True, seek=None, timeout=None):
                 # Stop looping when all patterns have been matched
                 break
 
-            if timeout is not None:
+            if timeout:
                 if time.time() - start > timeout:
                     return False
 

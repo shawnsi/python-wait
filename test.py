@@ -26,7 +26,7 @@ class TestWait(unittest.TestCase):
         assert wait.log.exists(self.file.name)
 
     def test_log_exists_timeout(self):
-        assert not wait.log.exists('/tmp/nolog', timeout=0)
+        assert not wait.log.exists('/tmp/nolog', timeout=1)
 
     def test_log_pattern_list(self):
         seek = self.file.tell()
@@ -52,8 +52,8 @@ class TestWait(unittest.TestCase):
         assert p()
 
     def test_log_pattern_timeout(self):
-        assert not wait.log.pattern('/tmp/nolog', self.patterns, timeout=0)
-        assert not self.pattern(self.patterns, timeout=0)
+        assert not wait.log.pattern('/tmp/nolog', self.patterns, timeout=1)
+        assert not self.pattern(self.patterns, timeout=1)
 
     def test_tcp_open(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -64,7 +64,7 @@ class TestWait(unittest.TestCase):
         s.close()
 
     def test_tcp_open_timeout(self):
-        assert not wait.tcp.open(self.port, timeout=0)
+        assert not wait.tcp.open(self.port, timeout=1)
 
     def tearDown(self):
         self.file.close()
