@@ -55,11 +55,16 @@ class TestWait(unittest.TestCase):
         assert not wait.log.pattern('/tmp/nolog', self.patterns, timeout=1)
         assert not self.pattern(self.patterns, timeout=1)
 
+    def test_tcp_closed(self):
+        assert wait.tcp.closed(self.port, timeout=1)
+        assert not wait.tcp.open(self.port, timeout=1)
+
     def test_tcp_open(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.bind(('localhost', self.port))
         s.listen(0)
-        assert wait.tcp.open(self.port, timeout=5)
+        assert not wait.tcp.closed(self.port, timeout=1)
+        assert wait.tcp.open(self.port, timeout=1)
         assert wait.tcp.open(80, host='www.google.com', timeout=5)
         s.close()
 

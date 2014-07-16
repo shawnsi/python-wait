@@ -6,6 +6,15 @@ from .decorator import timeout
 
 
 @timeout
+def closed(port, host='localhost', timeout=300):
+    try:
+        s = socket.create_connection((host, port))
+        s.close()
+    except socket.error:
+        return True
+
+
+@timeout
 def open(port, host='localhost', timeout=300):
     try:
         s = socket.create_connection((host, port))
