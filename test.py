@@ -68,6 +68,10 @@ class TestWait(unittest.TestCase):
         assert wait.tcp.open(80, host='www.google.com', timeout=5)
         s.close()
 
+    def test_tcp_socket_timeout(self):
+        assert wait.tcp.closed(self.port, host='10.255.255.1', timeout=1)
+        assert not wait.tcp.open(self.port, host='10.255.255.1', timeout=1)
+
     def test_tcp_open_timeout(self):
         assert not wait.tcp.open(self.port, timeout=1)
 
