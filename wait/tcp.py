@@ -8,7 +8,7 @@ from .decorator import timeout
 @timeout
 def closed(port, host='localhost', timeout=300):
     try:
-        s = socket.create_connection((host, port))
+        s = socket.create_connection((host, port), timeout)
         s.close()
     except socket.error:
         return True
@@ -17,7 +17,7 @@ def closed(port, host='localhost', timeout=300):
 @timeout
 def open(port, host='localhost', timeout=300):
     try:
-        s = socket.create_connection((host, port))
+        s = socket.create_connection((host, port), timeout)
         s.close()
         return True
     except socket.error:
