@@ -43,6 +43,11 @@ Block until tcp port 80 is listening on localhost.
 wait.tcp.open(80)
 ```
 
+Block until tcp port 80 is closed on localhost.
+```python
+wait.tcp.closed(80)
+```
+
 Block until tcp port 80 is listening on a remote host.
 
 ```python
